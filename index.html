@@ -2114,118 +2114,29 @@
       }
 
       /* ==========================================================================
-         14. ACCESSIBLE MODAL (PROJECT DETAILS & GITHUB PAGES GUIDE)
+         14. INLINE PROJECT HIGHLIGHTS
          ========================================================================== */
-      .modal-backdrop {
-        position: fixed;
-        inset: 0;
-        z-index: 200;
-        background: rgba(8, 8, 10, 0.86);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: var(--gutter);
-        opacity: 0;
-        visibility: hidden;
-        pointer-events: none;
-        transition: opacity 240ms ease, visibility 240ms;
+      .project-inline-details {
+        margin-top: 0.85rem;
+        padding-top: 0.85rem;
+        border-top: 1px dashed var(--border-subtle);
+        display: none;
       }
 
-      .modal-backdrop.is-open {
-        opacity: 1;
-        visibility: visible;
-        pointer-events: auto;
+      .project-inline-details.is-open {
+        display: block;
       }
 
-      .modal-dialog {
-        width: 100%;
-        max-width: 46rem;
-        max-height: 88vh;
-        overflow-y: auto;
-        background: var(--surface-2);
-        border: 1px solid var(--border-strong);
-        padding: 2.5rem;
-        position: relative;
-        transform: translateY(1.25rem);
-        transition: transform 280ms var(--ease-out-expo);
-      }
-
-      .modal-backdrop.is-open .modal-dialog {
-        transform: translateY(0);
-      }
-
-      @media (max-width: 640px) {
-        .modal-dialog {
-          padding: 1.5rem;
-        }
-      }
-
-      .modal-close {
-        position: absolute;
-        top: 1.25rem;
-        right: 1.25rem;
-        width: 2.5rem;
-        height: 2.5rem;
-        border: 1px solid var(--border-strong);
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1rem;
+      .project-inline-list {
+        padding-left: 1.15rem;
         color: var(--fg);
-        transition: border-color 160ms ease, color 160ms ease;
+        opacity: 0.88;
+        font-size: 0.875rem;
+        line-height: 1.65;
       }
 
-      .modal-close:hover {
-        border-color: var(--accent);
-        color: var(--accent);
-      }
-
-      .modal-kicker {
-        font-size: 0.78rem;
-        font-weight: 600;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
-        color: var(--accent);
-        margin-bottom: 0.5rem;
-      }
-
-      .modal-title {
-        font-family: var(--font-display);
-        font-size: clamp(1.85rem, 3vw, 2.75rem);
-        line-height: 1.05;
-        text-transform: uppercase;
-        color: var(--fg);
-        margin-bottom: 1.25rem;
-        padding-right: 2.5rem;
-      }
-
-      .modal-text {
-        font-size: 0.98rem;
-        color: var(--fg);
-        opacity: 0.9;
-        line-height: 1.7;
-        margin-bottom: 1.5rem;
-      }
-
-      .modal-list {
-        padding-left: 1.2rem;
-        color: var(--muted);
-        font-size: 0.92rem;
-        line-height: 1.75;
-        margin-bottom: 1.5rem;
-      }
-
-      .modal-code {
-        background: #08080a;
-        border: 1px solid var(--border-subtle);
-        padding: 1rem 1.25rem;
-        font-family: monospace;
-        font-size: 0.82rem;
-        color: var(--fg);
-        overflow-x: auto;
-        margin-bottom: 1.25rem;
+      .project-inline-list li + li {
+        margin-top: 0.35rem;
       }
 
       /* ==========================================================================
@@ -3382,9 +3293,6 @@
               <button type="button" class="secondary-cta" id="copy-email-btn">
                 Copy Email Address
               </button>
-              <button type="button" class="secondary-cta" id="open-deploy-modal-btn">
-                GitHub Pages &amp; Export HTML
-              </button>
             </div>
           </div>
 
@@ -3505,27 +3413,6 @@
         </div>
       </div>
     </footer>
-
-    <!-- ========================================================================
-         PROJECT DETAILS & GITHUB PAGES DEPLOYMENT MODAL
-         ======================================================================== -->
-    <div
-      class="modal-backdrop"
-      id="info-modal"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="modal-title"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog" data-lenis-prevent>
-        <button type="button" class="modal-close" id="modal-close-btn" aria-label="Close dialog">
-          ✕
-        </button>
-        <div class="modal-kicker" id="modal-kicker">PROJECT DETAILS</div>
-        <h3 class="modal-title" id="modal-title">Project Title</h3>
-        <div id="modal-body"></div>
-      </div>
-    </div>
 
     <!-- ========================================================================
          VANILLA JAVASCRIPT ENGINE (LENIS + PRELOADER + REVEALS + LIQUID FILTER)
@@ -3928,7 +3815,7 @@
       }
 
       /* ------------------------------------------------------------------------
-         11. PROJECT DETAILS & GITHUB PAGES DEPLOYMENT MODAL
+         11. INLINE PROJECT DETAILS TOGGLE
          ------------------------------------------------------------------------ */
       const PROJECTS_DATA = [
         {
@@ -4010,134 +3897,29 @@
         },
       ];
 
-      const modal = document.getElementById('info-modal');
-      const modalKicker = document.getElementById('modal-kicker');
-      const modalTitle = document.getElementById('modal-title');
-      const modalBody = document.getElementById('modal-body');
-      const modalCloseBtn = document.getElementById('modal-close-btn');
-
-      function openModal(kicker, title, bodyHtml) {
-        if (!modal || !modalKicker || !modalTitle || !modalBody) return;
-        modalKicker.textContent = kicker;
-        modalTitle.textContent = title;
-        modalBody.innerHTML = bodyHtml;
-        modal.classList.add('is-open');
-        modal.setAttribute('aria-hidden', 'false');
-        if (lenis) lenis.stop();
-        modalCloseBtn?.focus();
-      }
-
-      function closeModal() {
-        if (!modal) return;
-        modal.classList.remove('is-open');
-        modal.setAttribute('aria-hidden', 'true');
-        if (lenis && !document.body.classList.contains('is-loading')) {
-          lenis.start();
-        }
-      }
-
-      modalCloseBtn?.addEventListener('click', closeModal);
-      modal?.addEventListener('click', (e) => {
-        if (e.target === modal) closeModal();
-      });
-      window.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && modal?.classList.contains('is-open')) {
-          closeModal();
-        }
-      });
-
       document.querySelectorAll('[data-project-index]').forEach((btn) => {
         btn.addEventListener('click', () => {
           const idx = Number(btn.getAttribute('data-project-index') || 0);
           const p = PROJECTS_DATA[idx];
           if (!p) return;
-          const listHtml = p.highlights.map((h) => `<li>${h}</li>`).join('');
-          openModal(
-            p.status,
-            p.title,
-            `<p class="modal-text">${p.description}</p>
-             <ul class="modal-list">${listHtml}</ul>`
-          );
-        });
-      });
-
-      // Download clean, self-contained index.html for GitHub Pages (zero preview scripts or host branding)
-      function downloadStandaloneHtml() {
-        const docClone = document.documentElement.cloneNode(true);
-
-        // Strip any injected preview/dev-server scripts or iframes so GitHub Pages gets a pure static file
-        docClone.querySelectorAll('script').forEach((s) => {
-          const src = s.getAttribute('src') || '';
-          const type = s.getAttribute('type') || '';
-          const isImportMap = type === 'importmap';
-          const isPortfolioScript =
-            type === 'module' && !src && (s.textContent || '').includes('UPLOADED_PORTRAIT_FALLBACK');
-          if (!isImportMap && !isPortfolioScript) {
-            s.remove();
+          const cardBody = btn.closest('.project-body');
+          if (!cardBody) return;
+          let detailsEl = cardBody.querySelector('.project-inline-details');
+          if (!detailsEl) {
+            detailsEl = document.createElement('div');
+            detailsEl.className = 'project-inline-details';
+            const listHtml = p.highlights.map((h) => `<li>${h}</li>`).join('');
+            detailsEl.innerHTML = `<ul class="project-inline-list">${listHtml}</ul>`;
+            const footer = cardBody.querySelector('.project-footer');
+            cardBody.insertBefore(detailsEl, footer);
+          }
+          const isOpen = detailsEl.classList.toggle('is-open');
+          btn.setAttribute('aria-expanded', String(isOpen));
+          const labelSpan = btn.querySelector('span:first-child');
+          if (labelSpan) {
+            labelSpan.textContent = isOpen ? 'Hide Project Details' : 'View Project Details';
           }
         });
-        docClone.querySelectorAll('iframe, vite-error-overlay').forEach((el) => el.remove());
-
-        // Embed uploaded portrait directly so it works on any GitHub Pages root or repository subpath
-        const cloneImg = docClone.querySelector('#hero-source-img');
-        const cloneSvgImg = docClone.querySelector('#hero-svg-image');
-        if (UPLOADED_PORTRAIT_FALLBACK && UPLOADED_PORTRAIT_FALLBACK.startsWith('data:image/')) {
-          if (cloneImg) cloneImg.setAttribute('src', UPLOADED_PORTRAIT_FALLBACK);
-          if (cloneSvgImg) cloneSvgImg.setAttribute('href', UPLOADED_PORTRAIT_FALLBACK);
-        }
-
-        // Reset hero lines, modal state, and preloader so initial load animation plays cleanly
-        const line1 = docClone.querySelector('#hero-line-1');
-        const line2 = docClone.querySelector('#hero-line-2');
-        if (line1) line1.textContent = 'FARINAS';
-        if (line2) line2.textContent = 'MUMTAJ H';
-
-        const cloneModal = docClone.querySelector('#info-modal');
-        if (cloneModal) {
-          cloneModal.classList.remove('is-open');
-          cloneModal.setAttribute('aria-hidden', 'true');
-        }
-
-        const pre = docClone.querySelector('#preloader');
-        if (pre) {
-          pre.classList.remove('is-fading', 'is-wiped');
-          pre.style.display = '';
-        }
-        const body = docClone.querySelector('body');
-        if (body) {
-          body.className = 'is-loading';
-        }
-        const htmlContent = '<!doctype html>\n' + docClone.outerHTML;
-        const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'index.html';
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        URL.revokeObjectURL(url);
-      }
-
-      document.getElementById('open-deploy-modal-btn')?.addEventListener('click', () => {
-        openModal(
-          'STATIC DEPLOYMENT GUIDE',
-          'Publish to GitHub Pages',
-          `<p class="modal-text">
-            This portfolio is built as a single, self-contained <strong>index.html</strong> using vanilla HTML, CSS, and JavaScript—with your uploaded photograph embedded and all preview wrappers stripped so it runs cleanly on GitHub Pages.
-          </p>
-          <ol class="modal-list">
-            <li>Click <strong>Download Standalone index.html</strong> below to save the clean single-file portfolio (with your portrait embedded).</li>
-            <li>In your GitHub repository, upload and replace the root <code>index.html</code> file (and remove any auto-generated <code>README.md</code> landing page if GitHub Pages was serving that instead of <code>index.html</code>).</li>
-            <li>Commit the updated <code>index.html</code> to your <code>main</code> branch.</li>
-            <li>In <strong>Settings → Pages</strong>, ensure <strong>Source</strong> is set to <strong>Deploy from a branch</strong> → <code>main</code> / <code>/ (root)</code>.</li>
-            <li>Wait 1–2 minutes for the GitHub Pages build to finish and hard-refresh your live URL.</li>
-          </ol>
-          <button type="button" class="email-cta" id="modal-download-html-btn" style="font-size:1.1rem;padding:0.75rem 1.35rem;">
-            Download Standalone index.html ↓
-          </button>`
-        );
-        document.getElementById('modal-download-html-btn')?.addEventListener('click', downloadStandaloneHtml);
       });
 
       // Copy Email button
