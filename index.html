@@ -546,15 +546,15 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 5.75rem var(--gutter) 3rem;
+        padding: 5.5rem var(--gutter) 2.75rem;
         overflow: hidden;
         background:
-          radial-gradient(circle at 50% 36%, rgba(255, 59, 29, 0.12) 0%, transparent 48%),
-          radial-gradient(circle at 72% 62%, var(--violet-glow) 0%, transparent 45%),
+          radial-gradient(circle at 50% 28%, rgba(255, 59, 29, 0.14) 0%, transparent 52%),
+          radial-gradient(circle at 72% 64%, var(--violet-glow) 0%, transparent 45%),
           #08080a;
       }
 
-      /* Unified composition container keeps text and portrait locked together at any zoom (25% to 200%) */
+      /* Unified composition container keeps name above portrait with zero letter overlap at any zoom */
       .hero-composition {
         position: relative;
         width: 100%;
@@ -562,43 +562,43 @@
         margin: 0 auto;
         display: flex;
         flex-direction: column;
+        align-items: center;
         justify-content: center;
+        gap: clamp(0.85rem, 1.6vw, 1.5rem);
       }
 
-      /* Giant Two-Line Oversized Red Anton Typography Strictly Behind Portrait (z-index: 1) */
+      /* Oversized Red Anton Typography Positioned Cleanly Above Portrait (z-index: 8, No Overlap) */
       .hero-backdrop-type {
-        position: absolute;
-        top: 0.25rem;
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 1;
+        position: relative;
+        z-index: 8;
         width: 100%;
         display: flex;
-        flex-direction: column;
-        align-items: center;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: baseline;
+        column-gap: clamp(0.85rem, 2.2vw, 2.25rem);
+        row-gap: 0.06em;
         text-align: center;
         user-select: none;
         pointer-events: none;
       }
 
-      .hero-name-line {
+      .hero-name-line,
+      .hero-name-line.line-2 {
         display: flex;
         justify-content: center;
         flex-wrap: nowrap;
         font-family: var(--font-display);
-        font-size: clamp(3.6rem, 11.8vw, 12.2rem);
-        line-height: 0.88;
+        font-size: clamp(3.1rem, 8.5vw, 9.1rem);
+        line-height: 0.92;
         letter-spacing: -0.01em;
         text-transform: uppercase;
         color: var(--accent);
         overflow: hidden;
-        padding: 0.03em 0.02em;
+        padding: 0.04em 0.02em;
         white-space: nowrap;
-      }
-
-      .hero-name-line.line-2 {
-        font-size: clamp(3.2rem, 10.6vw, 11rem);
-        margin-top: 0.02em;
+        margin-top: 0;
       }
 
       .hero-char {
@@ -620,14 +620,14 @@
         opacity: 1;
       }
 
-      /* Foreground Stage — Strictly Above Backdrop Typography (z-index: 5) */
+      /* Foreground Stage — Positioned Below the Oversized Name So Portrait Never Hides Letters */
       .hero-stage {
         position: relative;
         width: 100%;
-        padding-top: clamp(2.25rem, 5.2vw, 4.75rem);
+        padding-top: 0;
         z-index: 5;
         display: grid;
-        grid-template-columns: minmax(14rem, 1fr) minmax(17rem, 26.5rem) minmax(14rem, 1fr);
+        grid-template-columns: minmax(14rem, 1fr) minmax(16.5rem, 23.5rem) minmax(14rem, 1fr);
         align-items: end;
         gap: clamp(1.25rem, 2.5vw, 2.5rem);
       }
@@ -685,12 +685,12 @@
         transform: translateY(0);
       }
 
-      /* Center Column: Uploaded Personal Photograph Composited in Front of Name (z-index: 10) */
+      /* Center Column: Uploaded Personal Photograph Visually Prominent Below Full Name (z-index: 10) */
       .hero-portrait-wrap {
         position: relative;
         z-index: 10;
         width: 100%;
-        max-width: 25.5rem;
+        max-width: clamp(17.5rem, 22.5vw, 22.5rem);
         margin: 0 auto;
         display: flex;
         flex-direction: column;
@@ -708,7 +708,7 @@
         opacity: 1;
       }
 
-      /* Dark contrast shield + subtle rim glow behind portrait so red letters never bleed over face */
+      /* Subtle atmospheric rim glow behind portrait */
       .hero-portrait-halo {
         position: absolute;
         width: 86%;
@@ -882,15 +882,19 @@
       }
 
       @media (max-width: 1080px) {
+        .hero-name-line,
+        .hero-name-line.line-2 {
+          font-size: clamp(2.85rem, 9.2vw, 6.4rem);
+        }
         .hero-stage {
-          padding-top: clamp(2rem, 6vw, 4rem);
+          padding-top: 0;
           grid-template-columns: 1fr 1fr;
-          gap: 1.75rem;
+          gap: 1.5rem;
         }
         .hero-portrait-wrap {
           grid-column: 1 / -1;
           order: -1;
-          max-width: 21rem;
+          max-width: 19.5rem;
         }
         .hero-roles {
           padding-bottom: 0.5rem;
@@ -909,21 +913,23 @@
           align-items: flex-start;
         }
         .hero-backdrop-type {
-          top: 0;
+          flex-direction: column;
+          align-items: center;
+          row-gap: 0.04em;
         }
         .hero-name-line {
-          font-size: clamp(3rem, 16.5vw, 5.25rem);
+          font-size: clamp(3rem, 15.5vw, 4.9rem);
         }
         .hero-name-line.line-2 {
-          font-size: clamp(2.65rem, 14.8vw, 4.75rem);
+          font-size: clamp(2.75rem, 14.2vw, 4.5rem);
         }
         .hero-stage {
-          padding-top: clamp(1.75rem, 8vw, 3.1rem);
+          padding-top: 0;
           grid-template-columns: 1fr;
-          gap: 1.35rem;
+          gap: 1.25rem;
         }
         .hero-portrait-wrap {
-          max-width: 16.5rem;
+          max-width: 16rem;
         }
         .hero-roles {
           padding-bottom: 0;
